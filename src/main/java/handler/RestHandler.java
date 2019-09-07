@@ -77,6 +77,7 @@ public class RestHandler extends HttpServlet {
 		HttpResponse Invokedresponse = client.execute(new HttpGet(RestServiceURL));
 		int statusCode = Invokedresponse.getStatusLine().getStatusCode();
 		System.out.println("Status Code:"+statusCode);
+		dataModel=new DataModel();
 		if(statusCode==200) {
 		HttpEntity entity = Invokedresponse.getEntity();
 		if (entity != null) {
@@ -92,27 +93,49 @@ public class RestHandler extends HttpServlet {
 			 * myJSONObject.getString("attribute3")); out.println("Vendor Name:"+
 			 * myJSONObject.getString("attribute14"));
 			 */
-			dataModel=new DataModel();
-			dataModel.setTrackNumber(myJSONObject.getString("attribute1"));
-			dataModel.setIncoTerm(myJSONObject.getString("incoTermGid"));
-			dataModel.setIncoTermLocation(myJSONObject.getString("termLocationText"));
-			dataModel.setCustomerName(myJSONObject.getString("attribute3"));
-			dataModel.setVendorName(myJSONObject.getString("attribute14"));
+			if(myJSONObject.has("attribute1")) {
+				dataModel.setTrackNumber(myJSONObject.getString("attribute1"));
+			}else {
+				dataModel.setTrackNumber("NULL");
+			}
+			    
+			if(myJSONObject.has("incoTermGid")) {
+			    dataModel.setIncoTerm(myJSONObject.getString("incoTermGid"));
+			}else {
+			    dataModel.setIncoTerm("NULL");
+			}
+			if(myJSONObject.has("termLocationText")) {
+			    dataModel.setIncoTermLocation(myJSONObject.getString("termLocationText"));
+			}else {
+			    dataModel.setIncoTermLocation("NULL");
+			}
+			if(myJSONObject.has("attribute3")) {
+			    dataModel.setCustomerName(myJSONObject.getString("attribute3"));
+			}else {
+				dataModel.setCustomerName("NULL");
+			}
+			if(myJSONObject.has("attribute4")) {
+			    dataModel.setVendorName(myJSONObject.getString("attribute4"));
+			}else {
+				dataModel.setVendorName("NULL");
+			}
 			HttpSession session = request.getSession();
 			session.setAttribute("model", dataModel);
-			RequestDispatcher rs = request.getRequestDispatcher("index.jsp");
+			RequestDispatcher rs = request.getRequestDispatcher("result.jsp");
 			rs.forward(request, response);
 		}
 	}else if(statusCode==404) {
 		HttpSession session = request.getSession();
+		session.setAttribute("model", null);
 		session.setAttribute("message", "No data for this parameter value.");
-		RequestDispatcher rs = request.getRequestDispatcher("index.jsp");
+		RequestDispatcher rs = request.getRequestDispatcher("result.jsp");
 		rs.forward(request, response);
 	}
 		else {
 		HttpSession session = request.getSession();
 		session.setAttribute("message", "Error occured while connecting to the service");
-		RequestDispatcher rs = request.getRequestDispatcher("index.jsp");
+		session.setAttribute("model", null);
+		RequestDispatcher rs = request.getRequestDispatcher("result.jsp");
 		rs.forward(request, response);
 	}
 	}

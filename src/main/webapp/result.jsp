@@ -18,6 +18,43 @@
 </div>
 <button type="submit" class="btn btn-default">Fetch Data</button>
 </form>
+<% 
+DataModel model= (DataModel)session.getAttribute("model");
+
+%>
+<% if(model!=null){ %>
+   <table class="table table-hover">
+   <tr>
+   <th>Display Name</th>
+   <th>JSON Filed Value</th>
+   </tr>
+   <tr>
+   <td>Track & Trace Number</td>
+   <td><%= model.getTrackNumber()%></td>
+   </tr>
+   <tr>
+   <td>Inco Term</td>
+   <td><%= model.getIncoTerm()%></td>
+   </tr>
+   <tr>
+   <td>Inco Term Location</td>
+   <td><%=model.getIncoTermLocation() %></td>
+   </tr>
+   <tr>
+   <td>Customer Name</td>
+   <td><%=model.getCustomerName() %></td>
+   </tr>
+   <tr>
+   <td>Vendor Name</td>
+   <td><%=model.getVendorName() %></td>
+   </tr>
+   </table>
+<%}else{%>
+     <% String message = (String)session.getAttribute("message"); %>
+     <%if(message!=null) {%>
+     <h3><%= message %></h3>
+     <%} %>
+<%} %>
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
